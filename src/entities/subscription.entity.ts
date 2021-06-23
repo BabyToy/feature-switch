@@ -1,12 +1,19 @@
-import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
+import { Entity, ManyToOne, PrimaryKey, Property } from "@mikro-orm/core";
+import shortUuid from "short-uuid";
+
+import { Account } from "./account.entities";
+import { Feature } from "./feature.entity";
 
 @Entity()
 export class Subscription {
   @PrimaryKey()
-  email!: string;
+  id: string;
 
-  @PrimaryKey()
-  featureId!: string;
+  @ManyToOne()
+  account!: Account;
+
+  @ManyToOne()
+  feature!: Feature;
 
   @Property()
   added = new Date();
@@ -14,9 +21,9 @@ export class Subscription {
   @Property({ onUpdate: () => new Date() })
   modified? = new Date();
 
-  constructor(email: string, featureId: string) {
-    this.email = email;
-    this.featureId = featureId;
-    this.added = new Date();
+  constructor(account: Account, feature: Feature) {
+    this.id = shortUuid().generate();
+    this.account = account;
+    this.feature = feature;
   }
 }

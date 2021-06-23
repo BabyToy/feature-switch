@@ -12,4 +12,4 @@ import { FeaturesService } from "./features.service";
   controllers: [FeaturesController],
   providers: [FeaturesService],
 })
-export class FeaturesModule {}
+export class FeatureModule {}

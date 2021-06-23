@@ -3,16 +3,16 @@ import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
 @Entity()
 export class Subscription {
   @PrimaryKey()
-  email: string;
+  email!: string;
 
   @PrimaryKey()
-  featureId: string;
+  featureId!: string;
 
   @Property()
   added = new Date();
 
   @Property({ onUpdate: () => new Date() })
-  modified = new Date();
+  modified? = new Date();
 
   constructor(email: string, featureId: string) {
     this.email = email;

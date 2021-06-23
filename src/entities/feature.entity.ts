@@ -4,10 +4,10 @@ import shortUuid from "short-uuid";
 @Entity()
 export class Feature {
   @PrimaryKey()
-  id: string;
+  id!: string;
 
   @Property()
-  name: string;
+  name!: string;
 
   constructor(name: string) {
     this.id = shortUuid().generate();

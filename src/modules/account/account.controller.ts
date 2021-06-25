@@ -38,8 +38,8 @@ export class AccountController {
     return this.service.create(body);
   }
 
-  @Put()
-  update(@Body() body: AccountDto) {
+  @Put(":email")
+  update(@Param() email: string, @Body() body: AccountDto) {
     return this.service.update(body);
   }
 }

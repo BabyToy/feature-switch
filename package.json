@@ -21,18 +21,16 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@mikro-orm/cli": "^4.5.6",
-    "@mikro-orm/core": "^4.5.6",
-    "@mikro-orm/nestjs": "^4.2.0",
-    "@mikro-orm/sql-highlighter": "^1.0.1",
-    "@mikro-orm/sqlite": "^4.5.6",
     "@nestjs/common": "^7.6.15",
     "@nestjs/core": "^7.6.15",
     "@nestjs/platform-express": "^7.6.15",
+    "@nestjs/typeorm": "^7.1.5",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.1.0",
-    "short-uuid": "^4.2.0"
+    "short-uuid": "^4.2.0",
+    "sqlite3": "^5.0.2",
+    "typeorm": "^0.2.34"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.6.0",

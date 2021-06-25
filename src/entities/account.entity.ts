@@ -2,11 +2,14 @@ import shortUuid from "short-uuid";
 import { BeforeInsert, Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity()
-export class Feature {
+export class Account {
   @PrimaryColumn()
-  id!: string;
+  id: string;
 
   @Column({ nullable: false, unique: true })
+  email: string;
+
+  @Column()
   name: string;
 
   @BeforeInsert()
@@ -14,7 +17,8 @@ export class Feature {
     this.id = shortUuid.generate();
   }
 
-  constructor(name: string) {
+  constructor(email: string, name: string) {
+    this.email = email;
     this.name = name;
   }
 }

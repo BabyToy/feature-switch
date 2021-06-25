@@ -1,7 +1,7 @@
-import { EntityRepository, wrap } from "@mikro-orm/core";
-import { InjectRepository } from "@mikro-orm/nestjs";
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
 import { Feature } from "src/entities/feature.entity";
+import { Repository } from "typeorm";
 
 export interface FeatureDto {
   id: string;
@@ -12,7 +12,7 @@ export interface FeatureDto {
 export class FeaturesService {
   constructor(
     @InjectRepository(Feature)
-    private readonly repository: EntityRepository<Feature>
+    private readonly repository: Repository<Feature>
   ) {}
 
   healthCheck(): string {
@@ -20,35 +20,48 @@ export class FeaturesService {
   }
 
   async findAll(page: number, pageSize: number) {
-    const totalItems = await this.repository.findAndCount({});
-    const pageCount = Math.trunc(totalItems.length / pageSize);
-    const items = await this.repository.findAll({
-      limit: pageSize,
-      offset: (page - 1) * pageSize,
+    const [items, count] = await this.repository.findAndCount({
+      take: pageSize,
+      skip: (page - 1) * pageSize,
     });
-    return { pageCount, totalItems, items };
+    return {
+      pageCount: Math.trunc(count / pageSize) + 1,
+      totalItems: count,
+      items,
+    };
   }
 
-  async findOne(id: string) {
-    const feature = await this.repository.findOne({ id });
-    if (!feature) {
-      throw new HttpException("Feature not found", HttpStatus.NOT_FOUND);
+  async findOne(id?: string, name?: string) {
+    let account: Feature | undefined;
+    if (id) {
+      account = await this.repository.findOne(id);
     }
-    return feature;
+    if (name) {
+      account = await this.repository.findOne({ where: { name } });
+    }
+    if (!account) {
+      throw new HttpException("Account not found", HttpStatus.NOT_FOUND);
+    }
+    return account;
   }
 
-  create(body: FeatureDto) {
+  async create(body: FeatureDto) {
     const account = new Feature(body.name);
-    wrap(account);
-    return this.repository.persist(account);
+    try {
+      return this.repository.save(account);
+    } catch (e) {
+      return new HttpException(e.message, HttpStatus.BAD_REQUEST);
+    }
   }
 
-  async update(body: FeatureDto) {
-    const feature = await this.repository.findOne({ id: body.id });
-    if (!feature) {
-      throw new HttpException("Feature not found", HttpStatus.NOT_FOUND);
+  async update(id: string, body: FeatureDto) {
+    const account = await this.repository.findOne(id);
+    if (!account) {
+      throw new HttpException("Account not found", HttpStatus.NOT_FOUND);
     }
-    wrap(feature).assign(body);
-    return this.repository.persist(feature);
+    await this.repository.update(id, {
+      name: body.name,
+    });
+    return this.repository.findOne(id);
   }
 }

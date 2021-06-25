@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Put, Query } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+  Query,
+} from "@nestjs/common";
 
 import { FeatureDto, FeaturesService } from "./features.service";
 
@@ -19,13 +28,18 @@ export class FeaturesController {
     return this.service.findAll(page, pageSize);
   }
 
-  @Get(":id")
-  findOne(@Param() id: string) {
-    return this.service.findOne(id);
+  @Get("find")
+  find(@Query("id") id?: string, @Query("name") name?: string) {
+    return this.service.findOne(id, name);
   }
 
-  @Put()
-  update(@Body() body: FeatureDto) {
-    return this.service.update(body);
+  @Post()
+  create(@Body() body: FeatureDto) {
+    return this.service.create(body);
+  }
+
+  @Put(":id/update")
+  update(@Param() id: string, @Body() body: FeatureDto) {
+    return this.service.update(id, body);
   }
 }

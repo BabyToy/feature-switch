@@ -1,28 +1,34 @@
-import { Entity, ManyToOne, PrimaryKey, Property } from "@mikro-orm/core";
 import shortUuid from "short-uuid";
-
-import { Account } from "./account.entities";
-import { Feature } from "./feature.entity";
+import { BeforeInsert, Column, Entity, PrimaryColumn, Unique } from "typeorm";
 
 @Entity()
+@Unique("sub_account_feature", ["account", "feature"])
 export class Subscription {
-  @PrimaryKey()
+  @PrimaryColumn()
   id: string;
 
-  @ManyToOne()
-  account!: Account;
+  @Column({ nullable: false })
+  account: string;
 
-  @ManyToOne()
-  feature!: Feature;
+  @Column({ nullable: false })
+  feature: string;
 
-  @Property()
-  added = new Date();
+  @Column()
+  enabled: boolean;
 
-  @Property({ onUpdate: () => new Date() })
-  modified? = new Date();
+  @Column({ type: "datetime", default: () => "CURRENT_TIMESTAMP" })
+  added: Date;
 
-  constructor(account: Account, feature: Feature) {
-    this.id = shortUuid().generate();
+  @Column({ type: "datetime", nullable: true })
+  modified: Date;
+
+  @BeforeInsert()
+  setId() {
+    this.id = shortUuid.generate();
+    this.enabled = true;
+  }
+
+  constructor(account: string, feature: string) {
     this.account = account;
     this.feature = feature;
   }

@@ -28,9 +28,9 @@ export class AccountController {
     return this.service.findAll(page, pageSize);
   }
 
-  @Get(":email")
-  findOne(@Param() email: string) {
-    return this.service.findOne(email);
+  @Get("find")
+  find(@Query("id") id?: string, @Query("name") name?: string) {
+    return this.service.findOne(id, name);
   }
 
   @Post()
@@ -38,8 +38,8 @@ export class AccountController {
     return this.service.create(body);
   }
 
-  @Put(":email")
-  update(@Param() email: string, @Body() body: AccountDto) {
-    return this.service.update(body);
+  @Put(":id/update")
+  update(@Param() id: string, @Body() body: AccountDto) {
+    return this.service.update(id, body);
   }
 }

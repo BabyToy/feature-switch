@@ -39,7 +39,7 @@ export class AccountsService {
 
   create(body: AccountDto) {
     const account = new Account(body.email, body.name);
-    wrap(account);
+    wrap(account).assign(body);
     return this.repository.persist(account);
   }
 

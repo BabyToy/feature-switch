@@ -12,7 +12,7 @@ import { SubscriptionModule } from "./modules/subscription/subscription.module";
     MikroOrmModule.forRoot({
       entities: ["./dist/entities"],
       entitiesTs: ["./src/entities"],
-      dbName: "feature-handler.sqlite3",
+      dbName: "feature-switch.sqlite3",
       type: "sqlite",
     }),
     AccountModule,

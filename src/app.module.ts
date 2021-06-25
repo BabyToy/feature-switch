@@ -22,12 +22,7 @@ import { SubscriptionModule } from "./modules/subscription/subscription.module";
     FeatureModule,
     SubscriptionModule,
   ],
-  controllers: [
-    AppController,
-    // AccountController,
-    // FeaturesController,
-    // SubscriptionController,
-  ],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}

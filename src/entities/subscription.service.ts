@@ -40,18 +40,18 @@ export class SubscriptionService {
     };
   }
 
-  async findOne(id?: string, name?: string) {
-    let account: Subscription | undefined;
+  async findOne(id?: string, account?: string) {
+    let thisSubscription: Subscription | undefined;
     if (id) {
-      account = await this.repository.findOne(id);
+      thisSubscription = await this.repository.findOne(id);
     }
-    if (name) {
-      account = await this.repository.findOne({ where: { name } });
+    if (account) {
+      thisSubscription = await this.repository.findOne({ where: { account } });
     }
-    if (!account) {
+    if (!thisSubscription) {
       throw new HttpException("Account not found", HttpStatus.NOT_FOUND);
     }
-    return account;
+    return thisSubscription;
   }
 
   async create(body: SubscriptionDto) {
@@ -86,5 +86,13 @@ export class SubscriptionService {
       feature: body.feature,
     });
     return this.repository.findOne(id);
+  }
+
+  async toggle(id: string) {
+    const subscription = await this.repository.findOne(id);
+    if (!subscription) {
+      throw new HttpException("Subscription not found", HttpStatus.NOT_FOUND);
+    }
+    return this.repository.update(id, { enabled: !subscription.enabled });
   }
 }

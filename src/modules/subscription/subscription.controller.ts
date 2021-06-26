@@ -8,10 +8,12 @@ import {
   Put,
   Query,
 } from "@nestjs/common";
+
 import {
+  SubscriptionAddDto,
   SubscriptionDto,
   SubscriptionService,
-} from "src/entities/subscription.service";
+} from "./subscription.service";
 
 @Controller("subscriptions")
 export class SubscriptionController {
@@ -36,7 +38,7 @@ export class SubscriptionController {
   }
 
   @Post()
-  create(@Body() body: SubscriptionDto) {
+  create(@Body() body: SubscriptionAddDto) {
     return this.service.create(body);
   }
 

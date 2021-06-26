@@ -1,16 +1,19 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
+import { Account } from "src/entities/account.entity";
+import { Feature } from "src/entities/feature.entity";
+import { Subscription } from "src/entities/subscription.entity";
 import { Repository } from "typeorm";
 
-import { Account } from "./account.entity";
-import { Feature } from "./feature.entity";
-import { Subscription } from "./subscription.entity";
-
 export interface SubscriptionDto {
-  id: string;
   account: string;
   feature: string;
-  enabled: boolean;
+  enabled?: boolean;
+}
+
+export interface SubscriptionAddDto {
+  account: string;
+  feature: string;
 }
 
 @Injectable()
@@ -54,7 +57,7 @@ export class SubscriptionService {
     return thisSubscription;
   }
 
-  async create(body: SubscriptionDto) {
+  async create(body: SubscriptionAddDto) {
     const account = new Subscription(body.account, body.feature);
     this.repository
       .save(account)

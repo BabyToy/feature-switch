@@ -3,10 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Feature } from "src/entities/feature.entity";
 import { Repository } from "typeorm";
 
-export interface FeatureDto {
-  id: string;
-  name: string;
-}
+import FeatureDto from "./feature.dto";
 
 @Injectable()
 export class FeaturesService {
@@ -46,22 +43,22 @@ export class FeaturesService {
   }
 
   async create(body: FeatureDto) {
-    const account = new Feature(body.name);
+    const feature = new Feature(body.name);
     try {
-      return this.repository.save(account);
+      return this.repository.save(feature);
     } catch (e) {
       return new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
   }
 
   async update(id: string, body: FeatureDto) {
-    const account = await this.repository.findOne(id);
-    if (!account) {
+    const feature = await this.repository.findOne(id);
+    if (!feature) {
       throw new HttpException("Account not found", HttpStatus.NOT_FOUND);
     }
-    await this.repository.update(id, {
-      name: body.name,
+    return this.repository.save({
+      ...feature,
+      ...body,
     });
-    return this.repository.findOne(id);
   }
 }

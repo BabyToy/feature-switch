@@ -58,6 +58,7 @@ export class SubscriptionService {
   }
 
   async create(body: SubscriptionAddDto) {
+    await this.validate(body);
     const account = new Subscription(body.account, body.feature);
     this.repository
       .save(account)
@@ -69,7 +70,7 @@ export class SubscriptionService {
       });
   }
 
-  async update(id: string, body: SubscriptionDto) {
+  async validate(body: SubscriptionAddDto) {
     const promises = [];
     if (body.account) {
       promises.push(this.accountRepository.findOne(body.account));
@@ -84,6 +85,10 @@ export class SubscriptionService {
     if (!feature) {
       throw new HttpException("Feature not found", HttpStatus.NOT_FOUND);
     }
+  }
+
+  async update(id: string, body: SubscriptionDto) {
+    await this.validate({ account: body.account, feature: body.feature });
     await this.repository.update(id, {
       account: body.account,
       feature: body.feature,

@@ -24,12 +24,14 @@
     "@nestjs/common": "^7.6.15",
     "@nestjs/core": "^7.6.15",
     "@nestjs/platform-express": "^7.6.15",
+    "@nestjs/swagger": "^4.8.1",
     "@nestjs/typeorm": "^7.1.5",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.1.0",
     "short-uuid": "^4.2.0",
     "sqlite3": "^5.0.2",
+    "swagger-ui-express": "^4.1.6",
     "typeorm": "^0.2.34"
   },
   "devDependencies": {

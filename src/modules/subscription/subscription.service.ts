@@ -5,16 +5,8 @@ import { Feature } from "src/entities/feature.entity";
 import { Subscription } from "src/entities/subscription.entity";
 import { Repository } from "typeorm";
 
-export interface SubscriptionDto {
-  account: string;
-  feature: string;
-  enabled?: boolean;
-}
-
-export interface SubscriptionAddDto {
-  account: string;
-  feature: string;
-}
+import { SubscriptionAddDto } from "./subscription-new.dto";
+import SubscriptionDto from "./subscription.dto";
 
 @Injectable()
 export class SubscriptionService {
@@ -60,10 +52,10 @@ export class SubscriptionService {
   async create(body: SubscriptionAddDto) {
     await this.validate(body);
     const account = new Subscription(body.account, body.feature);
-    this.repository
+    return this.repository
       .save(account)
-      .then((data) => {
-        return data;
+      .then(async () => {
+        return this.repository.findOne(account.id);
       })
       .catch((e) => {
         throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
@@ -101,6 +93,7 @@ export class SubscriptionService {
     if (!subscription) {
       throw new HttpException("Subscription not found", HttpStatus.NOT_FOUND);
     }
-    return this.repository.update(id, { enabled: !subscription.enabled });
+    await this.repository.update(id, { enabled: !subscription.enabled });
+    return this.repository.findOne(id);
   }
 }

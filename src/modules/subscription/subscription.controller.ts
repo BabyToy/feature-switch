@@ -31,26 +31,23 @@ export class SubscriptionController {
   @ApiOperation({ summary: "Get a list of subscriptions" })
   @ApiResponse({ status: 200, type: SubscriptionPageDto })
   findAll(
-    @Query("pageSize", ParseIntPipe) pageSize: number,
-    @Query("page", ParseIntPipe) page: number
+    @Query("pageSize", ParseIntPipe) pageSize = 10,
+    @Query("page", ParseIntPipe) page = 1,
+    @Query("account") account?: string
   ) {
-    return this.service.findAll(page, pageSize);
+    return this.service.findAll({ account, page, pageSize });
   }
 
   @Get("find")
   @ApiOperation({ summary: "Get a subscription" })
   @ApiResponse({ status: 200, type: Subscription })
-  find(
-    @Query("id") id?: string,
-    @Query("account") account?: string
-  ): Promise<Subscription> {
-    return this.service.findOne(id, account);
+  find(@Query("id") id?: string): Promise<Subscription> {
+    return this.service.findOne(id);
   }
 
   @Post()
   @ApiOperation({ summary: "Create a subscription" })
   @ApiResponse({ status: HttpStatus.CREATED, type: Subscription })
-  // @ApiBody({ type: SubscriptionAddDto })
   create(@Body() body: SubscriptionAddDto): Promise<Subscription> {
     return this.service.create(body);
   }
@@ -61,15 +58,15 @@ export class SubscriptionController {
   @ApiBody({ type: SubscriptionDto })
   update(
     @Param("id") id: string,
-    @Body("body") body: SubscriptionDto
+    @Body() body: SubscriptionDto
   ): Promise<Subscription> {
     return this.service.update(id, body);
   }
 
-  @Post("toggle")
+  @Post(":id/toggle")
   @ApiOperation({ summary: "Toggle a subscription for an account" })
-  @ApiResponse({ status: 200, type: Subscription })
-  toggle(@Query("id") id: string): Promise<Subscription> {
+  @ApiResponse({ status: 201, type: Subscription })
+  toggle(@Param("id") id: string): Promise<Subscription> {
     return this.service.toggle(id);
   }
 }

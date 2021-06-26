@@ -25,7 +25,11 @@ export class Subscription {
   @ApiProperty()
   added: Date;
 
-  @Column({ type: "datetime", nullable: true })
+  @Column({
+    type: "datetime",
+    onUpdate: "CURRENT_TIMESTAMP(6)",
+    nullable: true,
+  })
   @ApiProperty()
   modified: Date;
 

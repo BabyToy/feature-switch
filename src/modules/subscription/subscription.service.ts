@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Account } from "src/entities/account.entity";
 import { Feature } from "src/entities/feature.entity";
 import { Subscription } from "src/entities/subscription.entity";
-import { Repository } from "typeorm";
+import { FindManyOptions, Repository } from "typeorm";
 
 import { SubscriptionAddDto } from "./subscription-new.dto";
 import SubscriptionDto from "./subscription.dto";
@@ -23,11 +23,23 @@ export class SubscriptionService {
     return "Accounts: Alive";
   }
 
-  async findAll(page: number, pageSize: number) {
-    const [items, count] = await this.repository.findAndCount({
+  async findAll({
+    account,
+    page,
+    pageSize,
+  }: {
+    account?: string;
+    page: number;
+    pageSize: number;
+  }) {
+    const terms: FindManyOptions = {
       take: pageSize,
       skip: (page - 1) * pageSize,
-    });
+    };
+    if (account) {
+      terms.where = { account };
+    }
+    const [items, count] = await this.repository.findAndCount(terms);
     return {
       pageCount: Math.trunc(count / pageSize) + 1,
       totalItems: count,
@@ -35,14 +47,8 @@ export class SubscriptionService {
     };
   }
 
-  async findOne(id?: string, account?: string) {
-    let thisSubscription: Subscription | undefined;
-    if (id) {
-      thisSubscription = await this.repository.findOne(id);
-    }
-    if (account) {
-      thisSubscription = await this.repository.findOne({ where: { account } });
-    }
+  async findOne(id?: string) {
+    const thisSubscription = await this.repository.findOne(id);
     if (!thisSubscription) {
       throw new HttpException("Account not found", HttpStatus.NOT_FOUND);
     }
@@ -81,11 +87,8 @@ export class SubscriptionService {
 
   async update(id: string, body: SubscriptionDto) {
     await this.validate({ account: body.account, feature: body.feature });
-    await this.repository.update(id, {
-      account: body.account,
-      feature: body.feature,
-    });
-    return this.repository.findOne(id);
+    const subscription = await this.repository.findOne(id);
+    return this.repository.save({ ...subscription, ...body });
   }
 
   async toggle(id: string) {
@@ -93,7 +96,9 @@ export class SubscriptionService {
     if (!subscription) {
       throw new HttpException("Subscription not found", HttpStatus.NOT_FOUND);
     }
-    await this.repository.update(id, { enabled: !subscription.enabled });
-    return this.repository.findOne(id);
+    return this.repository.save({
+      ...subscription,
+      enabled: !subscription.enabled,
+    });
   }
 }

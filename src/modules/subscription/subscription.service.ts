@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Account } from "src/entities/account.entity";
-import { Feature } from "src/entities/feature.entity";
-import { Subscription } from "src/entities/subscription.entity";
 import { FindManyOptions, Repository } from "typeorm";
 
+import { Account } from "../../entities/account.entity";
+import { Feature } from "../../entities/feature.entity";
+import { Subscription } from "../../entities/subscription.entity";
 import { SubscriptionAddDto } from "./subscription-new.dto";
 import SubscriptionDto from "./subscription.dto";
 

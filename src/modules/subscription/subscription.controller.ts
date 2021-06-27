@@ -10,11 +10,11 @@ import {
   Query,
 } from "@nestjs/common";
 import { ApiBody, ApiOperation, ApiResponse } from "@nestjs/swagger";
-import { Subscription } from "src/entities/subscription.entity";
-import SubscriptionPageDto from "src/modules/subscription/subscription-page.dto";
+
+import { Subscription } from "../../entities/subscription.entity";
+import SubscriptionPageDto from "../../modules/subscription/subscription-page.dto";
 import { SubscriptionAddDto } from "./subscription-new.dto";
 import SubscriptionDto from "./subscription.dto";
-
 import { SubscriptionService } from "./subscription.service";
 
 @Controller("subscriptions")

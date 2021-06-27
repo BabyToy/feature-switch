@@ -10,9 +10,9 @@ import {
   Query,
 } from "@nestjs/common";
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
-import { Account } from "src/entities/account.entity";
-import AccountsPagedDto from "./account-paginated.dto";
 
+import { Account } from "../../entities/account.entity";
+import AccountsPagedDto from "./account-paginated.dto";
 import AccountDto from "./account.dto";
 import { AccountsService } from "./account.service";
 

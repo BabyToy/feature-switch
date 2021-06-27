@@ -9,8 +9,8 @@ import {
   Query,
 } from "@nestjs/common";
 import { ApiOperation, ApiResponse } from "@nestjs/swagger";
-import { Feature } from "src/entities/feature.entity";
 
+import { Feature } from "../../entities/feature.entity";
 import FeatureDto from "./feature.dto";
 import FeaturePageDto from "./features-pagination.dto";
 import { FeaturesService } from "./features.service";

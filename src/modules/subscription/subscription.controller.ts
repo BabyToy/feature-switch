@@ -13,9 +13,11 @@ import { ApiBody, ApiOperation, ApiResponse } from "@nestjs/swagger";
 
 import { Subscription } from "../../entities/subscription.entity";
 import SubscriptionPageDto from "../../modules/subscription/subscription-page.dto";
+import SubscriptionToggleResultDto from "./subcription-toggle-result.dto";
 import { SubscriptionAddDto } from "./subscription-new.dto";
 import SubscriptionDto from "./subscription.dto";
 import { SubscriptionService } from "./subscription.service";
+import SubscriptionToggleDto from "./susbcription-toggle.dto";
 
 @Controller("subscriptions")
 export class SubscriptionController {
@@ -65,11 +67,8 @@ export class SubscriptionController {
 
   @Post("toggle")
   @ApiOperation({ summary: "Toggle a subscription for an account" })
-  @ApiResponse({ status: 201, type: Subscription })
-  toggle(
-    @Param("email") email: string,
-    @Param("name") name: string
-  ): Promise<Subscription> {
-    return this.service.toggle(email, name);
+  @ApiResponse({ status: 201, type: SubscriptionToggleResultDto })
+  toggle(@Body() body: SubscriptionToggleDto) {
+    return this.service.toggle(body);
   }
 }

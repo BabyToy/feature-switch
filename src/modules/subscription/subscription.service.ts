@@ -7,6 +7,7 @@ import { Feature } from "../../entities/feature.entity";
 import { Subscription } from "../../entities/subscription.entity";
 import { SubscriptionAddDto } from "./subscription-new.dto";
 import SubscriptionDto from "./subscription.dto";
+import SubscriptionToggleDto from "./susbcription-toggle.dto";
 
 @Injectable()
 export class SubscriptionService {
@@ -91,10 +92,10 @@ export class SubscriptionService {
     return this.repository.save({ ...subscription, ...body });
   }
 
-  async toggle(email: string, featureName: string) {
+  async toggle(body: SubscriptionToggleDto) {
     const [account, feature] = await Promise.all([
-      this.accountRepository.findOne({ where: { email } }),
-      this.featureRepository.findOne({ where: { name: featureName } }),
+      this.accountRepository.findOne({ where: { email: body.email } }),
+      this.featureRepository.findOne({ where: { name: body.featureName } }),
     ]);
     if (!account) {
       throw new HttpException("Account not found", HttpStatus.NOT_FOUND);
@@ -108,9 +109,10 @@ export class SubscriptionService {
     if (!subscription) {
       throw new HttpException("Subscription not found", HttpStatus.NOT_FOUND);
     }
-    return this.repository.save({
+    const result = await this.repository.save({
       ...subscription,
       enabled: !subscription.enabled,
     });
+    return { canAccess: result.enabled };
   }
 }

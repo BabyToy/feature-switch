@@ -29,32 +29,30 @@ export class FeaturesService {
   }
 
   async findOne(id?: string, name?: string) {
-    let account: Feature | undefined;
+    let feature: Feature | undefined;
     if (id) {
-      account = await this.repository.findOne(id);
+      feature = await this.repository.findOne(id);
     }
     if (name) {
-      account = await this.repository.findOne({ where: { name } });
+      feature = await this.repository.findOne({ where: { name } });
     }
-    if (!account) {
-      throw new HttpException("Account not found", HttpStatus.NOT_FOUND);
+    if (!feature) {
+      throw new HttpException("Feature not found", HttpStatus.NOT_FOUND);
     }
-    return account;
+    return feature;
   }
 
   async create(body: FeatureDto) {
     const feature = new Feature(body.name);
-    try {
-      return this.repository.save(feature);
-    } catch (e) {
-      return new HttpException(e.message, HttpStatus.BAD_REQUEST);
-    }
+    await this.repository.save(feature).catch(() => {
+      throw new HttpException("", HttpStatus.NOT_MODIFIED);
+    });
   }
 
   async update(id: string, body: FeatureDto) {
     const feature = await this.repository.findOne(id);
     if (!feature) {
-      throw new HttpException("Account not found", HttpStatus.NOT_FOUND);
+      throw new HttpException("Feature not found", HttpStatus.NOT_FOUND);
     }
     return this.repository.save({
       ...feature,

@@ -44,11 +44,12 @@ export class AccountsService {
 
   async create(body: AccountDto) {
     const account = new Account(body.email, body.name);
-    try {
-      return this.repository.save(account);
-    } catch (e) {
-      return new HttpException(e.message, HttpStatus.BAD_REQUEST);
-    }
+    return this.repository
+      .save(account)
+      .then((account) => account)
+      .catch((e) => {
+        throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+      });
   }
 
   async update(id: string, body: AccountDto) {

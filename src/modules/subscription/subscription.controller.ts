@@ -63,10 +63,13 @@ export class SubscriptionController {
     return this.service.update(id, body);
   }
 
-  @Post(":id/toggle")
+  @Post("toggle")
   @ApiOperation({ summary: "Toggle a subscription for an account" })
   @ApiResponse({ status: 201, type: Subscription })
-  toggle(@Param("id") id: string): Promise<Subscription> {
-    return this.service.toggle(id);
+  toggle(
+    @Param("email") email: string,
+    @Param("name") name: string
+  ): Promise<Subscription> {
+    return this.service.toggle(email, name);
   }
 }

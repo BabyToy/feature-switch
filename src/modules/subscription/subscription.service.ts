@@ -91,8 +91,20 @@ export class SubscriptionService {
     return this.repository.save({ ...subscription, ...body });
   }
 
-  async toggle(id: string) {
-    const subscription = await this.repository.findOne(id);
+  async toggle(email: string, featureName: string) {
+    const [account, feature] = await Promise.all([
+      this.accountRepository.findOne({ where: { email } }),
+      this.featureRepository.findOne({ where: { name: featureName } }),
+    ]);
+    if (!account) {
+      throw new HttpException("Account not found", HttpStatus.NOT_FOUND);
+    }
+    if (!feature) {
+      throw new HttpException("Feature not found", HttpStatus.NOT_FOUND);
+    }
+    const subscription = await this.repository.findOne({
+      where: { accountId: account.id, featureId: feature.id },
+    });
     if (!subscription) {
       throw new HttpException("Subscription not found", HttpStatus.NOT_FOUND);
     }

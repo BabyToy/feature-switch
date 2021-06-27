@@ -3,10 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Account } from "src/entities/account.entity";
 import { Repository } from "typeorm";
 
-export interface AccountDto {
-  email: string;
-  name: string;
-}
+import AccountDto from "./account.dto";
 
 @Injectable()
 export class AccountsService {
@@ -59,10 +56,6 @@ export class AccountsService {
     if (!account) {
       throw new HttpException("Account not found", HttpStatus.NOT_FOUND);
     }
-    await this.repository.update(id, {
-      email: body.email,
-      name: body.name,
-    });
-    return this.repository.findOne(id);
+    return this.repository.save({ ...account, ...body });
   }
 }

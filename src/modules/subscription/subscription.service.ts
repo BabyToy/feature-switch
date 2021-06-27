@@ -37,7 +37,7 @@ export class SubscriptionService {
       skip: (page - 1) * pageSize,
     };
     if (account) {
-      terms.where = { account };
+      terms.where = { accountId: account };
     }
     const [items, count] = await this.repository.findAndCount(terms);
     return {

@@ -6,7 +6,7 @@ import { BeforeInsert, Column, Entity, PrimaryColumn } from "typeorm";
 export class Feature {
   @PrimaryColumn()
   @ApiProperty()
-  id!: string;
+  id: string;
 
   @Column({ nullable: false, unique: true })
   @ApiProperty()

@@ -3,7 +3,7 @@ import shortUuid from "short-uuid";
 import { BeforeInsert, Column, Entity, PrimaryColumn, Unique } from "typeorm";
 
 @Entity()
-@Unique("sub_account_feature", ["account", "feature"])
+@Unique("sub_account_feature", ["accountId", "featureId"])
 export class Subscription {
   @PrimaryColumn()
   @ApiProperty()
@@ -11,11 +11,11 @@ export class Subscription {
 
   @Column({ nullable: false })
   @ApiProperty()
-  account: string;
+  accountId: string;
 
   @Column({ nullable: false })
   @ApiProperty()
-  feature: string;
+  featureId: string;
 
   @Column()
   @ApiProperty()
@@ -40,7 +40,7 @@ export class Subscription {
   }
 
   constructor(account: string, feature: string) {
-    this.account = account;
-    this.feature = feature;
+    this.accountId = account;
+    this.featureId = feature;
   }
 }

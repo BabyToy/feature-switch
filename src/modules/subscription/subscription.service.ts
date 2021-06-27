@@ -89,6 +89,9 @@ export class SubscriptionService {
   async update(id: string, body: SubscriptionDto) {
     await this.validate({ account: body.account, feature: body.feature });
     const subscription = await this.repository.findOne(id);
+    if (!subscription) {
+      throw new HttpException("Subscription not found", HttpStatus.NOT_FOUND);
+    }
     return this.repository.save({ ...subscription, ...body });
   }
 

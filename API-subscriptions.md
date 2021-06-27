@@ -19,11 +19,17 @@
 
 * **Success Response:**
 
-  * **Code:** 200 <br />
+  * **Code:** 201 CREATED <br />
 
 * **Error Response:**
 
-  * **Code:** 403 NOT CREATED <br />
+  * **Code:** 404 NOT FOUND <br />  
+  * **Content:**  
+    `{ "statusCode": 404, "message": "Feature not found" }`
+
+  * **Code:** 404 NOT FOUND <br />  
+  * **Content:**  
+    `{ "statusCode": 404, "message": "Account not found" }`
 
 **Update a subscription**
 
@@ -45,15 +51,30 @@
 
   * **Code:** 200 <br />
     **Content:**  
-    ``
+    `{
+    "accountId": "8zfGpXdSFBpCNyToMnJFn5",
+    "featureId": "pqG3fhgS3MarVZ2FQJywbx",
+    "id": "95PvQpUUm79WkBvmCCUCAX",
+    "enabled": "true",
+    "added": "2021-06-27T07:04:20.000Z",
+    "modified": null,
+    "feature": "pqG3fhgS3MarVZ2FQJywbx",
+    "account": "8zfGpXdSFBpCNyToMnJFn5"
+}`
 
 * **Error Response:**
 
-  Feature does not exist
-
-  * **Code:** 404 NOT FOUND <br />
-    **Content:**  
+  * **Code:** 404 NOT FOUND <br />  
+  * **Content:**  
     `{ "statusCode": 404, "message": "Feature not found" }`
+
+  * **Code:** 404 NOT FOUND <br />  
+  * **Content:**  
+    `{ "statusCode": 404, "message": "Account not found" }`
+
+  * **Code:** 404 NOT FOUND <br />  
+  * **Content:**  
+    `{ "statusCode": 404, "message": "Subscription not found" }`
 
 **Get a paginated list of subscriptions**
 
@@ -72,11 +93,31 @@
    `pageSize=int`  
    `page=int`
 
+   **Optional:**
+
+  An account ID may be passed to the service to filter for all subcriptions belonging to that account
+
+   `account=string`  
+
 * **Success Response:**
 
   * **Code:** 200 <br />
     **Content:**  
-    ``
+    `{
+  "pageCount": 1,
+  "totalItems": 1,
+  "items": [
+    {
+      "accountId": "8zfGpXdSFBpCNyToMnJFn5",
+      "featureId": "pqG3fhgS3MarVZ2FQJywbx",
+      "id": "95PvQpUUm79WkBvmCCUCAX",
+      "enabled": true,
+      "added": "2021-06-27T07:04:20.000Z",
+      "modified": null
+    }
+  ]
+}
+`
 
 **Get a specific subscription**
 
@@ -99,4 +140,11 @@
 
   * **Code:** 200 <br />
     **Content:**  
-    ``
+    `{
+  "accountId": "8zfGpXdSFBpCNyToMnJFn5",
+  "featureId": "pqG3fhgS3MarVZ2FQJywbx",
+  "id": "95PvQpUUm79WkBvmCCUCAX",
+  "enabled": false,
+  "added": "2021-06-27T07:04:20.000Z",
+  "modified": null
+}`

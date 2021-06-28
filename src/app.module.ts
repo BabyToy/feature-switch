@@ -1,7 +1,6 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
-import { AppService } from "./app.service";
 import { Account } from "./entities/account.entity";
 import { Feature } from "./entities/feature.entity";
 import { Subscription } from "./entities/subscription.entity";
@@ -21,6 +20,5 @@ import { SubscriptionModule } from "./modules/subscription/subscription.module";
     FeatureModule,
     SubscriptionModule,
   ],
-  providers: [AppService],
 })
 export class AppModule {}

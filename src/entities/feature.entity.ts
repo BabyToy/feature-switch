@@ -16,6 +16,10 @@ export class Feature {
   @ApiProperty()
   added: Date;
 
+  @Column()
+  @ApiProperty()
+  enabled: boolean;
+
   @BeforeInsert()
   setId() {
     this.id = shortUuid.generate();

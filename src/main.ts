@@ -9,7 +9,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle("Feature toggle")
     .setDescription("The featur-toggle API description")
-    .setVersion("1.0")
+    .setVersion("2.0")
     .addTag("test")
     .build();
   const document = SwaggerModule.createDocument(app, config);

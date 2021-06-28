@@ -1,6 +1,12 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
 export default class FeatureDto {
   @ApiProperty()
-  name: string;
+  featureName: string;
+
+  @ApiProperty()
+  email: string;
+
+  @ApiPropertyOptional()
+  enable?: string;
 }

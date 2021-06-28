@@ -8,13 +8,17 @@ export class Feature {
   @ApiProperty()
   id: string;
 
-  @Column({ nullable: false, unique: true })
+  @Column({ nullable: false })
   @ApiProperty()
-  name: string;
+  featureName: string;
 
   @Column({ type: "datetime", default: () => "CURRENT_TIMESTAMP" })
   @ApiProperty()
   added: Date;
+
+  @Column({ nullable: false })
+  @ApiProperty()
+  email: string;
 
   @Column()
   @ApiProperty()
@@ -25,7 +29,9 @@ export class Feature {
     this.id = shortUuid.generate();
   }
 
-  constructor(name: string) {
-    this.name = name;
+  constructor(email: string, featureName: string) {
+    this.email = email;
+    this.featureName = featureName;
+    this.enabled = false;
   }
 }

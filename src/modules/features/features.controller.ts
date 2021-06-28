@@ -38,20 +38,33 @@ export class FeaturesController {
     return this.service.findAll(page, pageSize);
   }
 
-  @Get("find")
+  @Get(":id")
   @ApiOperation({ summary: "Find a feature" })
   @ApiResponse({ status: 200, type: Feature })
-  find(@Query("id") id?: string, @Query("name") name?: string) {
-    return this.service.findOne(id, name);
+  find(@Param("id") id: string) {
+    return this.service.findId(id);
+  }
+
+  @Get()
+  @ApiOperation({ summary: "Find a feature by name" })
+  @ApiResponse({ status: 200, type: Feature, isArray: true })
+  findName(@Query("featureName") featureName: string) {
+    return this.service.find(featureName);
+  }
+
+  @Post("add")
+  @ApiOperation({ summary: "Create a feature" })
+  async create(@Body() body: FeatureDto) {
+    return this.service.create(body);
   }
 
   @Post()
-  @ApiOperation({ summary: "Create a feature" })
+  @ApiOperation({ summary: "Toggle a feature" })
   @ApiResponse({ status: 200 })
-  @HttpCode(204)
-  async create(@Body() body: FeatureDto, @Res() response: Response) {
+  @HttpCode(200)
+  async toggle(@Body() raw: FeatureDto, @Res() response: Response) {
     try {
-      await this.service.create(body);
+      await this.service.update(raw);
       response.status(HttpStatus.OK).send();
     } catch (e) {
       response.status(HttpStatus.NOT_MODIFIED).send();
@@ -62,6 +75,6 @@ export class FeaturesController {
   @ApiOperation({ summary: "Update a feature" })
   @ApiResponse({ status: 201, type: Feature })
   update(@Param() id: string, @Body() body: FeatureDto) {
-    return this.service.update(id, body);
+    return this.service.update(body);
   }
 }

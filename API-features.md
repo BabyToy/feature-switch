@@ -2,7 +2,7 @@
 
 * **URL**
 
-  /feature
+  /feature/add
 
 * **Method:**
 
@@ -12,7 +12,8 @@
 
   **Required:**
 
-  `name: string`
+  `featureName: string`
+  `email: string`
 
 * **Success Response:**
 
@@ -38,14 +39,23 @@
 
    `id=string`
 
+ **Data Params**
+
+   **Required:**
+
+  `featureName: string`
+  `email: string`
+
 * **Success Response:**
 
   * **Code:** 200 <br />
     **Content:**  
     `{
-  "name": "updated-feature",
-  "id": "pqG3fhgS3MarVZ2FQJywbx",
-  "added": "2021-06-27T07:00:40.000Z"
+  "id": "string",
+  "featureName": "string",
+  "added": "timstamp",
+  "email": "string",
+  "enabled": true
 }`
 
 * **Error Response:**
@@ -78,20 +88,15 @@
   * **Code:** 200 <br />
     **Content:**  
     `{
-  "pageCount": 2,
-  "totalItems": 3,
+  "pageCount": int,
+  "totalItems": int,
   "items": [
     {
-      "email": "ian@whitehouse.gov",
-      "name": "ian",
-      "id": "8zfGpXdSFBpCNyToMnJFn5",
-      "added": "2021-06-27T06:59:21.000Z"
-    },
-    {
-      "email": "this-is-an-email",
-      "name": "this-is-the-name",
-      "id": "efDUAuBG6jPCcoK7wGeBnr",
-      "added": "2021-06-27T12:14:36.000Z"
+      "id": "string",
+      "featureName": "string",
+      "added": "timestamp",
+      "email": "string",
+      "enabled": true
     }
   ]
 }`
@@ -100,7 +105,7 @@
 
 * **URL**
 
-  /feature/find
+  /feature/{id}
 
 * **Method:**
 
@@ -108,17 +113,46 @@
 
  **URL Params**
 
-   **Optional:**
+   **Required:**
 
    `id=string`  
-   `name=string`
 
 * **Success Response:**
 
   * **Code:** 200 <br />
     **Content:**  
     `{
-  "name": "updated-feature",
-  "id": "pqG3fhgS3MarVZ2FQJywbx",
-  "added": "2021-06-27T07:00:40.000Z"
+  "id": "string",
+  "featureName": "string",
+  "added": "timestamp",
+  "email": "string",
+  "enabled": true
 }`
+
+* **URL**
+
+  /feature/{featurename}
+
+* **Method:**
+
+  `GET`
+
+ **URL Params**
+
+   **Required:**
+
+   `featurename=string`  
+
+* **Success Response:**
+
+  * **Code:** 200 <br />
+    **Content:**  
+    `[
+    {
+      "id": "string",
+      "featureName": "string",
+      "added": "timestamp",
+      "email": "string",
+      "enabled": true
+    }
+  ]`

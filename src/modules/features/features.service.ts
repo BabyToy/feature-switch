@@ -28,35 +28,64 @@ export class FeaturesService {
     };
   }
 
-  async findOne(id?: string, name?: string) {
+  async findId(id?: string) {
+    return this.repository.findOne(id);
     let feature: Feature | undefined;
     if (id) {
       feature = await this.repository.findOne(id);
     }
-    if (name) {
-      feature = await this.repository.findOne({ where: { name } });
-    }
+
     if (!feature) {
       throw new HttpException("Feature not found", HttpStatus.NOT_FOUND);
     }
     return feature;
   }
 
-  async create(body: FeatureDto) {
-    const feature = new Feature(body.name);
-    await this.repository.save(feature).catch(() => {
-      throw new HttpException("", HttpStatus.NOT_MODIFIED);
-    });
+  async find(featureName?: string, email?: string) {
+    if (featureName) {
+      return this.repository.find({ where: { featureName } });
+    }
+    if (email) {
+      return this.repository.find({ where: { featureName: featureName } });
+    }
   }
 
-  async update(id: string, body: FeatureDto) {
-    const feature = await this.repository.findOne(id);
+  async create(body: FeatureDto) {
+    if (!body.email) {
+      throw new HttpException("Email is missing", HttpStatus.BAD_REQUEST);
+    }
+
+    if (!body.featureName) {
+      throw new HttpException(
+        "Feature name is missing",
+        HttpStatus.BAD_REQUEST
+      );
+    }
+
+    const feature = new Feature(body.email, body.featureName);
+    return this.repository
+      .save(feature)
+      .then((data) => data)
+      .catch((e: Error) => {
+        throw new HttpException(e.message, HttpStatus.NOT_MODIFIED);
+      });
+  }
+
+  async update(body: FeatureDto) {
+    const feature = await this.repository.findOne({
+      where: { email: body.email, featureName: body.featureName },
+    });
     if (!feature) {
       throw new HttpException("Feature not found", HttpStatus.NOT_FOUND);
     }
-    return this.repository.save({
-      ...feature,
-      ...body,
-    });
+    console.dir(body);
+    return this.repository
+      .save({
+        ...feature,
+        enabled: body.enable.toLowerCase() === "true",
+      })
+      .then((data) => {
+        console.dir(data);
+      });
   }
 }

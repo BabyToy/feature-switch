@@ -1,7 +1,6 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 
-import { AppService } from "./app.service";
 import { Feature } from "./entities/feature.entity";
 import { FeatureModule } from "./modules/features/features.module";
 
